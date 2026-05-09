@@ -14,6 +14,10 @@
   transition: none !important;
 }
 
+.ant-pro-global-header-collapsed-button {
+  display: none !important;
+}
+
 body {
   margin: 0;
   font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,

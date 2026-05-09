@@ -7,8 +7,8 @@ import {
   ProjectOutlined,
   SunOutlined,
   MoonOutlined,
-  MenuFoldOutlined,
-  MenuUnfoldOutlined,
+  // MenuFoldOutlined,
+  // MenuUnfoldOutlined,
 } from "@ant-design/icons";
 import { Dropdown, Button, theme } from "antd";
 import { useAppDispatch, useAppSelector } from "../store";
@@ -84,14 +84,6 @@ const AdminLayout = () => {
       location={{ pathname: location.pathname }}
       menuItemRender={(item, dom) => <Link to={item.path || "/"}>{dom}</Link>}
       onMenuHeaderClick={() => navigate("/")}
-      headerContentRender={() => (
-        <Button
-          type="text"
-          icon={collapsed ? <MenuUnfoldOutlined /> : <MenuFoldOutlined />}
-          onClick={() => setCollapsed(!collapsed)}
-          style={{ fontSize: 16 }}
-        />
-      )}
       token={{
         sider: {
           colorBgMenuItemSelected: token.colorPrimaryBg,
@@ -101,6 +93,7 @@ const AdminLayout = () => {
       actionsRender={() => [
         <Dropdown key="theme-dropdown" menu={themeMenuProps}>
           <Button
+            size="large"
             type="text"
             icon={isDarkMode ? <MoonOutlined /> : <SunOutlined />}
           />
