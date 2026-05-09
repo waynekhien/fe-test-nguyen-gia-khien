@@ -7,7 +7,7 @@ export const STATUS_MAP: Record<Task["status"], { color: string; hexColor: strin
 };
 
 export const PRIORITY_MAP: Record<Task["priority"], { color: string; text: string }> = {
-  low: { color: "green", text: "Low" },
-  medium: { color: "orange", text: "Medium" },
-  high: { color: "red", text: "High" },
+  low: { color: "success", text: "Low" },
+  medium: { color: "warning", text: "Medium" },
+  high: { color: "error", text: "High" },
 };
