@@ -1,4 +1,4 @@
-import { Card } from "antd";
+import { Card, Statistic } from "antd";
 import type { ReactNode } from "react";
 
 export interface StatCardProps {
@@ -16,11 +16,14 @@ export const StatCard = ({
 }: StatCardProps) => {
   return (
     <Card styles={{ body: { backgroundColor, borderRadius: 8 } }}>
-      <div className="flex items-center justify-between mb-2">
-        <span className="text-lg text-white">{title}</span>
-        {icon && <span className="text-2xl text-white/80">{icon}</span>}
+      <div className="flex flex-col">
+        {icon && <div className="text-3xl text-white/80">{icon}</div>}
+        <Statistic
+          value={value}
+          valueStyle={{ color: "white", fontWeight: "bold", fontSize: "1.875rem" }}
+        />
+        <div className="text-lg text-white/90">{title}</div>
       </div>
-      <p className="text-2xl font-bold text-white m-0">{value}</p>
     </Card>
   );
 };

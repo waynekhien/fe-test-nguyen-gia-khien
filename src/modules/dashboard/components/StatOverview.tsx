@@ -1,16 +1,27 @@
 import { useAppSelector } from "../../../store";
 import { selectTaskStats } from "../../../store/slices/taskSlice";
 import { StatCard } from "./StatCard";
-import { Col, Row } from "antd";
+import { Col, Row, Empty, Card } from "antd";
 import {
   AppstoreOutlined,
   ClockCircleOutlined,
   SyncOutlined,
   CheckCircleOutlined,
 } from "@ant-design/icons";
+import { STATUS_MAP } from "../../../constants/task";
 
 const StatOverview = () => {
   const stats = useAppSelector(selectTaskStats);
+
+  if (stats.total === 0) {
+    return (
+      <Card style={{ marginBottom: 16 }}>
+        <div className="flex justify-center items-center py-6">
+          <Empty description="No task statistics available" />
+        </div>
+      </Card>
+    );
+  }
 
   const statCards = [
     {
@@ -23,19 +34,19 @@ const StatOverview = () => {
       title: "Todo",
       value: stats.todo,
       icon: <ClockCircleOutlined />,
-      backgroundColor: "#eab308",
+      backgroundColor: STATUS_MAP.todo.hexColor,
     },
     {
       title: "In Progress",
       value: stats.inProgress,
       icon: <SyncOutlined />,
-      backgroundColor: "#0ea5e9",
+      backgroundColor: STATUS_MAP.in_progress.hexColor,
     },
     {
       title: "Done",
       value: stats.done,
       icon: <CheckCircleOutlined />,
-      backgroundColor: "#22c55e",
+      backgroundColor: STATUS_MAP.done.hexColor,
     },
   ];
 
