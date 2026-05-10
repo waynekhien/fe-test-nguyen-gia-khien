@@ -1,73 +1,92 @@
-# React + TypeScript + Vite
+# Task Board — Admin Dashboard
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+Ứng dụng quản lý công việc dạng dashboard, xây dựng bằng React, TypeScript và Ant Design.
 
-Currently, two official plugins are available:
+**Live Demo:** [https://taskboard-iota-hazel.vercel.app](https://taskboard-iota-hazel.vercel.app)
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+## Công nghệ sử dụng
 
-## React Compiler
+### Yêu cầu
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+| Công nghệ | Phiên bản | Mục đích |
+|---|---|---|
+| React | 18 | Framework |
+| TypeScript | 5 | Ngôn ngữ |
+| Vite | 8 | Build tool |
+| Redux Toolkit | 2.x | Quản lý state |
+| Ant Design | 5.x | Thư viện UI component |
+| Tailwind CSS | 3.x | Framework UI |
 
-## Expanding the ESLint configuration
+### Một số thư viện khác
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+| Công nghệ | Phiên bản | Lý do |
+|---|---|---|
+| ProComponents | 2.8 | Thư viện UI component |
+| Recharts | 3.8 | Thư viện vẽ biểu đồ |
+| nuqs | 2.8 | Thư viện đồng bộ state với URL |
 
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
+## Cài đặt & Chạy
 
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
+```bash
+# Clone dự án
+git clone https://github.com/waynekhien/fe-test-nguyen-gia-khien.git
+cd fe-test-nguyen-gia-khien
 
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+# Cài đặt dependencies
+yarn install
+
+# Chạy dev server
+yarn dev
+
+# Build production
+yarn build
+
 ```
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+## Tính năng
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
+### Dashboard
+- Thẻ thống kê: Total, Todo, In Progress, Done
+- Biểu đồ bar chart theo trạng thái (Recharts)
+- Bảng 5 task gần đây nhất
 
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-```
+![Dashboard](./docs/dashboard.png)
+
+### Quản lý Task (CRUD)
+- Thêm / Sửa task 
+- Xoá task với modal xác nhận
+- Xoá nhiều task
+- Đổi trạng thái trực tiếp bằng Select inline trong bảng
+- Thông báo thành công / lỗi cho mọi thao tác
+
+| Thêm Task | Sửa Task | Xoá Task |
+|---|---|---|
+| ![Thêm Task](./docs/add-task.png) | ![Sửa Task](./docs/edit-task.png) | ![Xoá Task](./docs/delete-task.png) |
+
+### Lọc & Tìm kiếm
+- Tìm kiếm theo tiêu đề (debounce 300ms)
+- Lọc theo trạng thái (multi-select), độ ưu tiên, khoảng hạn chót
+- Nút Reset xoá toàn bộ bộ lọc
+
+![Bộ lọc](./docs/filter.png)
+
+### Sắp xếp
+- Sort theo Tiêu đề, Độ ưu tiên, Hạn chót
+
+### Phân trang
+- Tuỳ chọn 10 / 20 / 50 dòng mỗi trang
+
+### Đồng bộ URL (nuqs)
+- Filter và sort được lưu trên URL query params
+- Chia sẻ link, refresh trang giữ nguyên trạng thái
+
+### Giao diện
+- Light / Dark mode
+- Quản lý theme qua Redux, Ant Design tokens tự thích ứng
+
+![Dark Mode](./docs/dark-mode.png)
+
+### Responsive
+- Sidebar thu gọn trên mobile
+- Filter bar responsive (Row/Col grid)
+- Bảng cuộn ngang trên màn hình nhỏ
