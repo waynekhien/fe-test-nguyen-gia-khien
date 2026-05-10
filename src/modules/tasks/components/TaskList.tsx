@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { ProTable } from "@ant-design/pro-components";
 import type { ProColumns } from "@ant-design/pro-components";
-import { Tag, Button, Space } from "antd";
+import { Tag, Button, Space, Select } from "antd";
 import { EditOutlined, DeleteOutlined } from "@ant-design/icons";
 import type { Task } from "../../../types/task";
 import { STATUS_MAP, PRIORITY_MAP } from "../../../constants/task";
@@ -27,7 +27,7 @@ export default function TaskList({ onEdit }: TaskListProps) {
     handleReset,
   } = useFilter();
   const { handleSortChange, getSorter } = useOrder();
-  const { handleDelete, handleBulkDelete } = useTaskActions();
+  const { handleDelete, handleBulkDelete, handleUpdateStatus } = useTaskActions();
   const [deleteTask, setDeleteTask] = useState<Task | null>(null);
   const [selectedRowKeys, setSelectedRowKeys] = useState<React.Key[]>([]);
 
@@ -48,15 +48,23 @@ export default function TaskList({ onEdit }: TaskListProps) {
     {
       title: "Status",
       dataIndex: "status",
-      width: 100,
-      render: (_, record) => {
-        const { color, text } = STATUS_MAP[record.status];
-        return (
-          <Tag color={color} bordered={false}>
-            {text}
-          </Tag>
-        );
-      },
+      width: 140,
+      render: (_, record) => (
+        <Select
+          value={record.status}
+          onChange={(value) => handleUpdateStatus(record.id, value)}
+          variant="borderless"
+          style={{ width: "100%" }}
+          options={Object.entries(STATUS_MAP).map(([value, { color, text }]) => ({
+            label: (
+              <Tag color={color} bordered={false}>
+                {text}
+              </Tag>
+            ),
+            value,
+          }))}
+        />
+      ),
     },
     {
       title: "Priority",
