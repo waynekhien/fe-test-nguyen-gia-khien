@@ -1,25 +1,21 @@
 import { useCallback, useMemo } from "react";
-import { useAppSelector, useAppDispatch } from "../store";
-import { selectSort, selectSortedTasks } from "../store/selectors/taskSelectors";
-import { setSort } from "../store/slices/taskSlice";
-import type { TaskSortField, TaskSortOrder } from "../store/slices/taskSlice";
+import { useUrlSync } from "./useUrlSync";
+import type { TaskSortField } from "../store/slices/taskSlice";
 import type { SorterResult } from "antd/es/table/interface";
 import type { Task } from "../types/task";
 
 export function useOrder() {
-  const dispatch = useAppDispatch();
-  const sort = useAppSelector(selectSort);
-  const sortedData = useAppSelector(selectSortedTasks);
+  const { sort, handleSortChange: urlSortChange } = useUrlSync();
 
   const handleSortChange = useCallback(
     (sorter: SorterResult<Task> | SorterResult<Task>[]) => {
       const s = Array.isArray(sorter) ? sorter[0] : sorter;
       const field = (s?.columnKey as TaskSortField) ?? null;
-      const order = (s?.order as TaskSortOrder) ?? null;
+      const order = s?.order ?? null;
 
-      dispatch(setSort({ field, order }));
+      urlSortChange(field, order);
     },
-    [dispatch],
+    [urlSortChange],
   );
 
   const getSorter = useMemo(() => {
@@ -37,7 +33,6 @@ export function useOrder() {
   }, [sort]);
 
   return {
-    sortedData,
     handleSortChange,
     getSorter,
   };

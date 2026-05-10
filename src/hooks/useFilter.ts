@@ -3,17 +3,24 @@ import { useAppSelector, useAppDispatch } from "../store";
 import {
   selectSortedTasks,
   selectPagination,
-  selectFilters,
 } from "../store/selectors/taskSelectors";
-import { setPage, setFilter, resetFilters } from "../store/slices/taskSlice";
-import type { Task } from "../types/task";
+import { setPage } from "../store/slices/taskSlice";
+import { useUrlSync } from "./useUrlSync";
 import type { TablePaginationConfig } from "antd";
 
 export function useFilter() {
   const dispatch = useAppDispatch();
   const sortedTasks = useAppSelector(selectSortedTasks);
   const { currentPage, pageSize } = useAppSelector(selectPagination);
-  const filters = useAppSelector(selectFilters);
+
+  const {
+    filters,
+    handleSearchChange,
+    handleStatusChange,
+    handlePriorityChange,
+    handleDateRangeChange,
+    handleReset,
+  } = useUrlSync();
 
   const handlePaginationChange = useCallback(
     (page: number, size: number) => {
@@ -21,38 +28,6 @@ export function useFilter() {
     },
     [dispatch],
   );
-
-  const handleSearchChange = useCallback(
-    (searchText: string) => {
-      dispatch(setFilter({ searchText }));
-    },
-    [dispatch],
-  );
-
-  const handleStatusChange = useCallback(
-    (status: Task["status"][]) => {
-      dispatch(setFilter({ status }));
-    },
-    [dispatch],
-  );
-
-  const handlePriorityChange = useCallback(
-    (priority: Task["priority"] | null) => {
-      dispatch(setFilter({ priority }));
-    },
-    [dispatch],
-  );
-
-  const handleDateRangeChange = useCallback(
-    (dateRange: [string, string] | null) => {
-      dispatch(setFilter({ dateRange }));
-    },
-    [dispatch],
-  );
-
-  const handleReset = useCallback(() => {
-    dispatch(resetFilters());
-  }, [dispatch]);
 
   const paginationConfig: TablePaginationConfig = {
     current: currentPage,
