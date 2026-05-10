@@ -10,7 +10,7 @@ import {
   XAxis,
   YAxis,
 } from "recharts";
-import { selectTaskStats } from "../../../store/slices/taskSlice";
+import { selectTaskStats } from "../../../store/selectors/taskSelectors";
 import { STATUS_MAP } from "../../../constants/task";
 import { useAppSelector } from "../../../store";
 

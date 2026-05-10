@@ -2,7 +2,7 @@ import { ProCard, ProTable } from "@ant-design/pro-components";
 import type { ProColumns } from "@ant-design/pro-components";
 import { Tag, Empty } from "antd";
 import { useAppSelector } from "../../../store";
-import { selectRecentTasks } from "../../../store/slices/taskSlice";
+import { selectRecentTasks } from "../../../store/selectors/taskSelectors";
 import type { Task } from "../../../types/task";
 import { STATUS_MAP, PRIORITY_MAP } from "../../../constants/task";
 

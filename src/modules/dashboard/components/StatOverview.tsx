@@ -1,5 +1,5 @@
 import { useAppSelector } from "../../../store";
-import { selectTaskStats } from "../../../store/slices/taskSlice";
+import { selectTaskStats } from "../../../store/selectors/taskSelectors";
 import { StatCard } from "./StatCard";
 import { Col, Row, Empty, Card } from "antd";
 import {

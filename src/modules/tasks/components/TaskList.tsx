@@ -3,14 +3,25 @@ import { ProTable } from "@ant-design/pro-components";
 import type { ProColumns } from "@ant-design/pro-components";
 import { Tag, Button, Space } from "antd";
 import { EditOutlined, DeleteOutlined } from "@ant-design/icons";
-import { useAppSelector } from "../../../store";
-import { selectAllTasks } from "../../../store/slices/taskSlice";
 import type { Task } from "../../../types/task";
 import { STATUS_MAP, PRIORITY_MAP } from "../../../constants/task";
 import DeleteTaskModal from "./DeleteTaskModal";
+import TaskFilter from "./TaskFilter";
+import { useFilter } from "../../../hooks/useFilter";
+import { useOrder } from "../../../hooks/useOrder";
 
 export default function TaskList() {
-  const tasks = useAppSelector(selectAllTasks);
+  const {
+    dataSource,
+    pagination,
+    filters,
+    handleSearchChange,
+    handleStatusChange,
+    handlePriorityChange,
+    handleDateRangeChange,
+    handleReset,
+  } = useFilter();
+  const { handleSortChange, getSorter } = useOrder();
   const [deleteTask, setDeleteTask] = useState<Task | null>(null);
 
   const handleDelete = (task: Task) => {
@@ -26,17 +37,12 @@ export default function TaskList() {
       ellipsis: true,
       fixed: "left",
       width: 200,
+      ...getSorter("title"),
     },
     {
       title: "Status",
       dataIndex: "status",
       width: 100,
-      valueType: "select",
-      valueEnum: {
-        todo: { text: STATUS_MAP.todo.text, status: "Default" },
-        in_progress: { text: STATUS_MAP.in_progress.text, status: "Processing" },
-        done: { text: STATUS_MAP.done.text, status: "Success" },
-      },
       render: (_, record) => {
         const { color, text } = STATUS_MAP[record.status];
         return (
@@ -50,12 +56,6 @@ export default function TaskList() {
       title: "Priority",
       dataIndex: "priority",
       width: 100,
-      valueType: "select",
-      valueEnum: {
-        low: { text: PRIORITY_MAP.low.text },
-        medium: { text: PRIORITY_MAP.medium.text },
-        high: { text: PRIORITY_MAP.high.text },
-      },
       render: (_, record) => {
         const { color, text } = PRIORITY_MAP[record.priority];
         return (
@@ -64,6 +64,7 @@ export default function TaskList() {
           </Tag>
         );
       },
+      ...getSorter("priority"),
     },
     {
       title: "Assignee",
@@ -75,8 +76,8 @@ export default function TaskList() {
       title: "Due Date",
       dataIndex: "dueDate",
       width: 120,
-      search: false,
       render: (text) => text || "-",
+      ...getSorter("dueDate"),
     },
     {
       title: "Action",
@@ -101,18 +102,22 @@ export default function TaskList() {
   return (
     <>
       <div className="overflow-x-auto">
+        <TaskFilter
+          filters={filters}
+          onSearchChange={handleSearchChange}
+          onStatusChange={handleStatusChange}
+          onPriorityChange={handlePriorityChange}
+          onDateRangeChange={handleDateRangeChange}
+          onReset={handleReset}
+        />
         <ProTable<Task>
           columns={columns}
-          dataSource={tasks}
+          dataSource={dataSource}
           rowKey="id"
-          search={{
-            labelWidth: "auto",
-          }}
-          pagination={{
-            pageSize: 10,
-            showSizeChanger: true,
-            showTotal: (total, range) =>
-              `${range[0]}-${range[1]} of ${total} tasks`,
+          search={false}
+          pagination={pagination}
+          onChange={(_pagination, _filters, sorter) => {
+            handleSortChange(sorter);
           }}
           dateFormatter="string"
           headerTitle="Tasks List"

@@ -1,4 +1,6 @@
 import { ConfigProvider, App as AntdApp, theme } from "antd";
+import enUS from "antd/locale/en_US";
+import { ProConfigProvider, enUSIntl } from "@ant-design/pro-components";
 import type { ReactNode } from "react";
 import { selectIsDarkMode } from "../store/slices/themeSlice";
 import { useAppSelector } from "../store";
@@ -12,6 +14,7 @@ const AntdProvider = ({ children }: AntdProviderProps) => {
 
   return (
     <ConfigProvider
+      locale={enUS}
       theme={{
         algorithm: isDarkMode ? theme.darkAlgorithm : theme.defaultAlgorithm,
         token: {
@@ -25,7 +28,9 @@ const AntdProvider = ({ children }: AntdProviderProps) => {
         },
       }}
     >
-      <AntdApp>{children}</AntdApp>
+      <ProConfigProvider intl={enUSIntl}>
+        <AntdApp>{children}</AntdApp>
+      </ProConfigProvider>
     </ConfigProvider>
   );
 };
