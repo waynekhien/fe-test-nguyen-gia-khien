@@ -2,7 +2,7 @@
 @tailwind components;
 @tailwind utilities;
 
-*,
+/* *,
 *::before,
 *::after {
   transition: background-color 0.3s ease, color 0.3s ease,
@@ -12,7 +12,7 @@
 .ant-menu *,
 .ant-pro-sider-menu * {
   transition: none !important;
-}
+} */
 
 .ant-pro-global-header-collapsed-button {
   display: none !important;

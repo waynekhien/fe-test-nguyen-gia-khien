@@ -9,8 +9,13 @@ import DeleteTaskModal from "./DeleteTaskModal";
 import TaskFilter from "./TaskFilter";
 import { useFilter } from "../../../hooks/useFilter";
 import { useOrder } from "../../../hooks/useOrder";
+import { useTaskActions } from "../../../hooks/useTaskActions";
 
-export default function TaskList() {
+interface TaskListProps {
+  onEdit: (task: Task) => void;
+}
+
+export default function TaskList({ onEdit }: TaskListProps) {
   const {
     dataSource,
     pagination,
@@ -22,11 +27,12 @@ export default function TaskList() {
     handleReset,
   } = useFilter();
   const { handleSortChange, getSorter } = useOrder();
+  const { handleDelete, handleBulkDelete } = useTaskActions();
   const [deleteTask, setDeleteTask] = useState<Task | null>(null);
+  const [selectedRowKeys, setSelectedRowKeys] = useState<React.Key[]>([]);
 
-  const handleDelete = (task: Task) => {
-    // TODO: dispatch delete action
-    console.log("Delete task:", task.id);
+  const onConfirmDelete = (task: Task) => {
+    handleDelete(task);
     setDeleteTask(null);
   };
 
@@ -86,7 +92,7 @@ export default function TaskList() {
       fixed: "right",
       render: (_, record) => (
         <Space size="small">
-          <Button type="link" icon={<EditOutlined />} size="small" />
+          <Button type="link" icon={<EditOutlined />} size="small" onClick={() => onEdit(record)} />
           <Button
             type="link"
             danger
@@ -121,6 +127,28 @@ export default function TaskList() {
           }}
           dateFormatter="string"
           headerTitle="Tasks List"
+          toolBarRender={() =>
+            selectedRowKeys.length > 0
+              ? [
+                  <Button
+                    key="bulk-delete"
+                    danger
+                    icon={<DeleteOutlined />}
+                    onClick={() =>
+                      handleBulkDelete(selectedRowKeys as string[], () =>
+                        setSelectedRowKeys([]),
+                      )
+                    }
+                  >
+                    Delete {selectedRowKeys.length} task(s)
+                  </Button>,
+                ]
+              : []
+          }
+          rowSelection={{
+            selectedRowKeys,
+            onChange: (keys) => setSelectedRowKeys(keys),
+          }}
           scroll={{ x: "max-content" }}
           options={false}
         />
@@ -128,7 +156,7 @@ export default function TaskList() {
       <DeleteTaskModal
         task={deleteTask}
         open={!!deleteTask}
-        onConfirm={handleDelete}
+        onConfirm={onConfirmDelete}
         onCancel={() => setDeleteTask(null)}
       />
     </>
